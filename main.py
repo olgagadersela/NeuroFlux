@@ -42,6 +42,8 @@ from data import (
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
+print("TELEGRAM_TOKEN =", os.environ.get("TELEGRAM_TOKEN"))
+print("OPENAI_API_KEY =", os.environ.get("OPENAI_API_KEY"))
 
 #if not TELEGRAM_TOKEN:
 #    raise ValueError("❌ TELEGRAM_TOKEN не найден. Проверь .env (локально) или Railway Variables.")
