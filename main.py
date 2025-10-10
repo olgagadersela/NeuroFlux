@@ -45,8 +45,10 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 #if not TELEGRAM_TOKEN:
 #    raise ValueError("❌ TELEGRAM_TOKEN не найден. Проверь .env (локально) или Railway Variables.")
-if not OPENAI_API_KEY:
-    raise ValueError("OPENAI_API_KEY не задан в .env")
+if OPENAI_API_KEY:
+    print("✅ OPENAI_API_KEY загружен")
+else:
+    raise ValueError("❌ OPENAI_API_KEY не найден в переменных окружения Railway")
 
 if TELEGRAM_TOKEN is None:
     print("⚠️ TELEGRAM_TOKEN не найден в окружении")
