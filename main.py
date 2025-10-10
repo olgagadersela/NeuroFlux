@@ -33,10 +33,6 @@ from data import (
     AUTHOR_MASKS
 )
 
-# --- Загрузка .env ---
-# Загружаем .env только если он есть
-#if os.path.exists(".env"):
- #   load_dotenv()
 
 # --- Конфигурация ---
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
