@@ -10,7 +10,7 @@ from typing import Optional, Dict, List, Union, Tuple
 import re
 import random
 from openai import OpenAI
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
 # --- Telegram bot ---
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
@@ -35,17 +35,23 @@ from data import (
 
 # --- Загрузка .env ---
 # Загружаем .env только если он есть
-if os.path.exists(".env"):
-    load_dotenv()
+#if os.path.exists(".env"):
+ #   load_dotenv()
 
 # --- Конфигурация ---
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
+
 if not TELEGRAM_TOKEN:
     raise ValueError("❌ TELEGRAM_TOKEN не найден. Проверь .env (локально) или Railway Variables.")
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY не задан в .env")
+
+if TELEGRAM_TOKEN is None:
+    print("⚠️ TELEGRAM_TOKEN не найден в окружении")
+else:
+    print("✅ TELEGRAM_TOKEN загружен")
 
 # --- Инициализация ---
 client = OpenAI(api_key=OPENAI_API_KEY)
