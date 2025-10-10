@@ -34,14 +34,16 @@ from data import (
 )
 
 # --- Загрузка .env ---
-load_dotenv()
+# Загружаем .env только если он есть
+if os.path.exists(".env"):
+    load_dotenv()
 
 # --- Конфигурация ---
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 if not TELEGRAM_TOKEN:
-    raise ValueError("TELEGRAM_TOKEN не задан в .env")
+    raise ValueError("❌ TELEGRAM_TOKEN не найден. Проверь .env (локально) или Railway Variables.")
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY не задан в .env")
 
