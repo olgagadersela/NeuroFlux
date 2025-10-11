@@ -1,5 +1,4 @@
-# Telegram AI Story Bot
-NeuroFlux: reprogramming_of_consciousness
+# Telegram AI Story Bot (NeuroFlux: reprogramming_of_consciousness)
 
 **Описание:**  
 Бот для создания эпизодов и серий историй с использованием OpenAI API. Пользователь выбирает тип контента, способ ввода и получает сгенерированный текст.  
@@ -26,3 +25,31 @@ NeuroFlux: reprogramming_of_consciousness
 ```bash
 git clone <URL_репозитория>
 cd <имя_папки>
+
+2. Создаём виртуальное окружение и активируем его:
+
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+
+3. Устанавливаем зависимости:
+
+pip install -r requirements.txt
+
+4. Настраиваем переменные окружения:
+Создаём .env файл в корне проекта (для локального запуска):
+
+TELEGRAM_TOKEN=токен_вашего_бота
+OPENAI_API_KEY=ваш_openai_api_key
+
+5. Запускаем бота:
+
+python main.py
+
+## Технологии
+
+Python 3.10+
+python-telegram-bot
+OpenAI API
+Railway (для деплоя)
+
