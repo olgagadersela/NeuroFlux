@@ -32,25 +32,24 @@ cd <имя_папки>
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
 venv\Scripts\activate     # Windows
-
+```
 3. Устанавливаем зависимости:
 
 ```bash
 pip install -r requirements.txt
-
-
+```
 4. Настраиваем переменные окружения:
 Создаём .env файл в корне проекта (для локального запуска):
 
 ```bash
 TELEGRAM_TOKEN=токен_вашего_бота
 OPENAI_API_KEY=ваш_openai_api_key
-
+```
 5. Запускаем бота:
 
 ```bash
 python main.py
-
+```
 ## Технологии
 
 Python 3.10+
