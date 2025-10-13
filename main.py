@@ -53,7 +53,7 @@ else:
     print("✅ TELEGRAM_TOKEN загружен")
 
 # --- Инициализация ---
-client = OpenAI(api_key=OPENAI_KEY)
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 # --- Логирование ---
 logging.basicConfig(level=logging.INFO)
