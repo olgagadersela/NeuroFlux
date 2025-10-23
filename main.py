@@ -927,7 +927,7 @@ async def choose_type(update: Update, context: ContextTypes.DEFAULT_TYPE):
         #await update.message.reply_text(
             #"Введите общую проблему для серии (или оставьте пустым):",
             #reply_markup=ReplyKeyboardRemove()
-        )
+       # )
         #context.user_data["current_state"] = CHOOSING_INPUT_MODE
        # return CHOOSING_INPUT_MODE  # ← возвращаем то же состояние
         #await update.message.reply_text("Введите проблему (или оставьте пустым):", reply_markup=ReplyKeyboardRemove())
