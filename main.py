@@ -1,4 +1,4 @@
-# main.py — Telegram-бот + story_bot в одном файле (без FastAPI)
+# main.py 
 
 import os
 import json
@@ -68,7 +68,7 @@ os.makedirs(INDEX_DIR, exist_ok=True)
 DATA_FILES = ["params.md", "postformatdb.md", "clasterDB.md", "author_masks_db.md", "effectdb.md"]
 
 # ==============================================================================
-# КОПИЯ ВСЕГО ИЗ story_bot.py (без FastAPI и HTTPException)
+#  story_bot.py
 # ==============================================================================
 
 def read_md_file(md_path: str) -> List[Dict]:
@@ -364,31 +364,6 @@ class PromptBuilder:
             except Exception as e:
                 prompt_parts.append(f"Ошибка загрузки маски автора: {e}")
         # 4. Формат
-        # prompt_parts.append("\n---\n🎭 ФОРМАТ — отвечает за структуру повествования...")
-        # format_type = self.data.get('format_type')
-        # if format_type:
-        #     try:
-        #         _, format_db = load_index("postformatdb.md")
-        #         format_entry = next((e for e in format_db if e.get("name") == format_type), None)
-        #         if format_entry:
-        #             prompt_parts.append("\nРАСШИФРОВКА ФОРМАТА ПОВЕСТВОВАНИЯ:")
-        #             for key in ["narrative_voice", "narrative_arc", "time_mode", "silence_weight", "rupture", "forbidden", "allowed", "visual", "palette", "final_stroke"]:
-        #                 val = format_entry.get(key)
-        #                 if val:
-        #                     prompt_parts.append(f"{key.replace('_', ' ').title()}: {val}")
-        #             desc_meta = format_entry.get("description_meta", {})
-        #             for k in ["ЦЕЛЬ", "ФОКУС", "ТОН", "СТРУКТУРА", "ПРИНЦИПЫ И ОТЛИЧИТЕЛЬНЫЕ ФИШКИ", "ПОДХОД"]:
-        #                 if k in desc_meta:
-        #                     prompt_parts.append(f"{k}: {desc_meta[k]}")
-        #             if self.data.get("similar_formats"):
-        #                 prompt_parts.append(f"\nПохожие форматы для вдохновения: {', '.join(self.data['similar_formats'])}")
-        #         else:
-        #             prompt_parts.append(f"Формат '{format_type}' не найден.")
-        #     except Exception as e:
-        #         prompt_parts.append(f"Ошибка загрузки формата: {e}")
-        # else:
-        #     prompt_parts.append("Формат повествования не задан.")
-
         prompt_parts.append("\n---\n🎭 ФОРМАТ — отвечает за структуру повествования, которая должна быть таковой, чтобы достигнуть заданной форматом Цели, но не за суть проблемы. Показывает как надо подавать, но не что надо подавать")
         format_type = self.data.get('format_type')
         if not format_type:
@@ -608,9 +583,6 @@ def resolve_story_context(data: Dict) -> Dict:
                     # Фильтруем только нужные типы
                     format_entries = [e for e in format_db if e.get("type") == "format"]
                     effect_entries = [e for e in effect_db if e.get("type") == "effect"]
-
-                    #params_entries = [e for e in params_db if e.get("type") in ["goal", "experts"]]
-                    
                     
                     if format_entries and effect_entries:
                         similar_formats = find_similar_by_tags(theme_entry, format_entries, top_k=2)
@@ -624,17 +596,13 @@ def resolve_story_context(data: Dict) -> Dict:
                         
                 except Exception as e:
                     logger.warning(f"Не удалось найти соседние элементы для темы '{data['theme']}': {e}")
-                # ------------------------------------------------------
-
 
             else:
                 logger.warning(f"Тема '{data['theme']}' НЕ найдена в БД по имени.")
-                # Можно оставить предоставленные cluster/planet или сгенерировать проблему
                 if not data.get("problem"):
                      logger.debug("Попытка сгенерировать проблему на основе темы...")
-                     # Попробуем сгенерировать проблему, связанную с темой, через select_parameter или fallback
-                     # Например, запросим goal, связанный с темой
-                     goal_param = select_parameter(data["theme"], "goal") # Используем тему как контекст
+
+                     goal_param = select_parameter(data["theme"], "goal") 
                      if goal_param and goal_param.get("name"):
                         data["problem"] = goal_param['description']
                         logger.info(f"Сгенерирована проблема на основе темы: {data['problem']}")
@@ -648,7 +616,7 @@ def resolve_story_context(data: Dict) -> Dict:
                             if I[0][0] != -1:
                                 theme_entry = db[I[0][0]]
                                 if theme_entry and theme_entry.get("name"):
-                                    # Нашли тему - берем из нее кластер и планету
+
                                     data['theme'] = theme_entry['name']
                                     data['cluster'] = theme_entry.get('cluster', data.get('cluster', 'не указан'))
                                     data['planet'] = theme_entry.get('planet', data.get('planet', 'не указана'))
@@ -659,10 +627,8 @@ def resolve_story_context(data: Dict) -> Dict:
                                 logger.warning("Тема по проблеме не найдена через FAISS")
                         except Exception as e:
                             logger.error(f"Ошибка при поиске темы по проблеме: {e}")
-                        # === КОНЕЦ ДОБАВЛЕНИЯ ===
 
                      else:
-                         # Последний fallback для проблемы
                          data["problem"] = f"Проблемы, связанные с '{data['theme']}'"
                          logger.info(f"Использована заглушка для проблемы: {data['problem']}")
 
@@ -679,14 +645,14 @@ def resolve_story_context(data: Dict) -> Dict:
             if I[0][0] != -1:
                 potential_theme_entry = db[I[0][0]]
                 # Проверяем, есть ли ключ "name" перед использованием
-                if potential_theme_entry and potential_theme_entry.get("name"): # <-- Добавлена проверка на None и ключ
+                if potential_theme_entry and potential_theme_entry.get("name"): 
                     theme_entry = potential_theme_entry
                     logger.info(f"Тема найдена по проблеме: {theme_entry['name']}")
                     data.update({
                         "theme": theme_entry["name"],
                         "cluster": theme_entry.get("cluster", data.get("cluster", "не указан")),
                         "planet": theme_entry.get("planet", data.get("planet", "не указана")),
-                        # problem уже есть в data
+
                     })
                     
                     # --- Найти "соседние" форматы и эффекты по тегам (если тема найдена через FAISS) ---
@@ -736,7 +702,7 @@ def resolve_story_context(data: Dict) -> Dict:
 
             param = select_parameter(context, param_type)
             # Проверяем, что param не None, прежде чем использовать .get()
-            if param and param.get("name"): # <-- Добавлена проверка
+            if param and param.get("name"): 
                  data[field] = param["name"]
                  logger.info(f"Параметр '{field}' автоподставлен через select_parameter: {data[field]}")
                 
@@ -745,7 +711,7 @@ def resolve_story_context(data: Dict) -> Dict:
                 
                 # --- Fallback: случайный выбор из типа, если select_parameter не помог ---
                 try:
-                    _, db = load_index("params.md") # Предполагаем, что все параметры тут
+                    _, db = load_index("params.md") 
                     filtered_db = [e for e in db if e.get("type") == param_type]
                     if filtered_db:
                         random_param = random.choice(filtered_db)
@@ -815,7 +781,7 @@ user_sessions = {}
 MAIN_MENU = ReplyKeyboardMarkup([
     ["🚀 Начать генерацию            /start"],
     ["ℹ️ Подробней о боте            /info"],
- #   ["❓ Спросить                   /help"],
+ #   ["❓ Спросить                   /help"], <---- алгоритм ограничения негибкий, требует доработки 
     ["🔄 Сброс генерации            /reset"],
     ["🧹 Очистить и начать сначала  /clear"]
 ], resize_keyboard=True)
@@ -918,7 +884,7 @@ async def handle_ai_question(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Очищаем данные при каждом новом запуске
-    #context.user_data.clear()
+
     user_id = update.effective_user.id
     logger.info(f"[start] Новый пользователь: {user_id}")
     context.user_data.clear()
@@ -928,7 +894,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "Начнем создавать истории? Выбери 📘 Эпизод ",
         reply_markup=ReplyKeyboardMarkup([
             ["📘 Эпизод"],
-            ["Главное меню"]  # Добавляем кнопку главного меню
+            ["Главное меню"] 
         ], resize_keyboard=True)
     )
     return CHOOSING_TYPE
@@ -938,12 +904,11 @@ async def choose_type(update: Update, context: ContextTypes.DEFAULT_TYPE):
     choice = update.message.text
     user_id = update.effective_user.id
 
-        # Обработка кнопки "Главное меню"
     if choice == "Главное меню":
         context.user_data.clear()
         return await show_main_menu(update, context)
     
-        # Обработка кнопки "Начать сначала"
+
     if choice == "Начать сначала":
         context.user_data.clear()
         return await show_main_menu(update, context)
@@ -958,13 +923,13 @@ async def choose_type(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         
         return CHOOSING_INPUT_MODE
-    #else: # "🎞 Серия"
-        await update.message.reply_text(
+    #else: # "🎞 Серия" <---- требует доработки
+        #await update.message.reply_text(
             #"Введите общую проблему для серии (или оставьте пустым):",
             #reply_markup=ReplyKeyboardRemove()
         )
-        context.user_data["current_state"] = CHOOSING_INPUT_MODE
-        return CHOOSING_INPUT_MODE  # ← возвращаем то же состояние
+        #context.user_data["current_state"] = CHOOSING_INPUT_MODE
+       # return CHOOSING_INPUT_MODE  # ← возвращаем то же состояние
         #await update.message.reply_text("Введите проблему (или оставьте пустым):", reply_markup=ReplyKeyboardRemove())
         #context.user_data["current_state"] = CHOOSING_INPUT_MODE
 
@@ -1369,7 +1334,6 @@ async def receive_theme_or_problem(update: Update, context: ContextTypes.DEFAULT
         logger.warning(f"[receive_theme_or_problem] Неожиданное состояние: {current_state} для пользователя {user_id}")
         await update.message.reply_text("Ошибка: неожиданное состояние. Начните заново.")
         user_sessions.pop(user_id, None)
-        #return ConversationHandler.END
         return await show_main_menu(update, context)
     
 async def receive_format(update, context):
@@ -1519,7 +1483,7 @@ async def receive_author_mask(update: Update, context: ContextTypes.DEFAULT_TYPE
         reply_markup=ReplyKeyboardRemove()
     )
 
-    # Увеличиваем счётчик
+    # Увеличиваем счётчик <----пока не работает
     increment_daily_count(user_id)
 
     return await generate(update, context)
