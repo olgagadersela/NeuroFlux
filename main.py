@@ -692,7 +692,7 @@ def resolve_story_context(data: Dict) -> Dict:
     # --- Автоподстановка параметров с улучшенным fallback ---
     logger.debug("Автоподстановка недостающих параметров...")
     for field, param_type in [
-        ("format_type", "format"),
+      #   ("format_type", "format"),
         ("emotion_effect", "effect"),
         ("goal", "goal"),
         ("experts", "experts")
